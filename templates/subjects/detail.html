@@ -1,0 +1,51 @@
+{% extends 'base.html' %} {% block content %}
+<div class="d-flex flex-column gap-5">
+  <div>
+    <h2>{{ subject.title }}</h2>
+    <img
+      class="img-fluid"
+      src="{{ subject.image }}"
+      alt="{{ subject.title }}"
+    />
+    <p>{{ subject.content }}</p>
+  </div>
+
+  <div>
+    <h3>교육목표</h3>
+    <h5>{{ subject.objective }}</h5>
+  </div>
+
+  <div>
+    <h3>추천대상</h3>
+    <h5>{{ subject.audience }}</h5>
+  </div>
+
+  <div>
+    <h3>수업 커리큘럼</h3>
+    <table class="table">
+      <thead class="table-light">
+        <tr>
+          <th scope="col">교시</th>
+          <th scope="col">주제</th>
+          <th scope="col">활동</th>
+          <th scople="col">내용</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in curriculums %}
+        <tr>
+          <td>{{ item.period }}</td>
+          <td>{{ item.topic }}</td>
+          <td>{{ item.task }}</td>
+          <td>{{ item.content }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="d-flex justify-content-center">
+    <a href="apply/" class="btn btn-primary btn-lg">수업신청</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+<style>
+  .card {
+    transition: transform 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-8px) scale(1.03);
+  }
+</style>
+
+{% extends 'base.html' %} {% block content %}
+<h2>액티브러닝 프로그램</h2>
+<p>
+  우리학교 히어로들에겐 어떤 경험이 필요한가요? 관심있는 프로그램을 선택해
+  수업을 신청하세요.
+</p>
+
+<div class="row my-5">
+  {% for subject in subjects %}
+  <div class="col-lg-4 col-6 mb-4" style="cursor: pointer">
+    <div class="card shadow" data-id="{{ subject.id }}">
+      <img
+        src="{{ subject.image }}"
+        class="card-img-top"
+        alt="{{ subject.title }}"
+      />
+      <div class="card-body">
+        <h5 class="card-title">{{ subject.title }}</h5>
+        <p class="card-text">{{ subject.content }}</p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<script>
+  $(".card").on("click", function () {
+    const id = $(this).data("id");
+    window.location.href = `/subjects/${id}/`;
+  });
+</script>
+
+{% endblock %}
