@@ -1,23 +1,25 @@
 {% extends 'base.html' %} {% block content %}
 <div class="d-flex flex-column gap-5">
-  <div>
-    <h2>{{ subject.title }}</h2>
+  <div class="d-flex justify-content-between align-items-start">
+    <div>
+      <h2>{{ subject.title }}</h2>
+      <p class="fs-5 text-muted">{{ subject.content }}</p>
+    </div>
     <img
       class="img-fluid"
-      src="{{ subject.image }}"
+      src="/uploads/subjects/subject_{{ subject.id }}_img.jpg"
       alt="{{ subject.title }}"
     />
-    <p>{{ subject.content }}</p>
   </div>
 
   <div>
     <h3>교육목표</h3>
-    <h5>{{ subject.objective }}</h5>
+    <p class="fs-5 text-muted">{{ subject.objective }}</p>
   </div>
 
   <div>
     <h3>추천대상</h3>
-    <h5>{{ subject.audience }}</h5>
+    <p class="fs-5 text-muted">{{ subject.audience }}</p>
   </div>
 
   <div>
@@ -36,8 +38,8 @@
         <tr>
           <td>{{ item.period }}</td>
           <td>{{ item.topic }}</td>
-          <td>{{ item.task }}</td>
-          <td>{{ item.content }}</td>
+          <td class="text-muted">{{ item.task }}</td>
+          <td class="text-muted">{{ item.content }}</td>
         </tr>
         {% endfor %}
       </tbody>

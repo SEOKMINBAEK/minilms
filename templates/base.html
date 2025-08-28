@@ -45,9 +45,11 @@
       }
     </style>
   </head>
-  <body>
+  <body class="d-flex flex-column min-vh-100">
     {% include 'header.html' %}
-    <main class="container my-5">{% block content %} {% endblock %}</main>
+    <main class="container my-5 flex-grow-1">
+      {% block content %} {% endblock %}
+    </main>
     {% include 'footer.html' %}
   </body>
 </html>
