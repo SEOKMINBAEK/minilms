@@ -47,7 +47,9 @@
   </div>
 
   <div class="d-flex justify-content-center">
-    <a href="../apply/{{ subject.id }}/" class="btn btn-primary btn-lg"
+    <a
+      href="{% url 'subjects:apply' subject.id %}"
+      class="btn btn-primary btn-lg"
       >수업신청</a
     >
   </div>

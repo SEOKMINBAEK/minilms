@@ -17,7 +17,10 @@
 <div class="row my-5">
   {% for subject in subjects %}
   <div class="col-lg-4 col-6 mb-4" style="cursor: pointer">
-    <a href="/subjects/{{ subject.id }}/" class="text-decoration-none">
+    <a
+      href="{% url 'subjects:detail' subject.id %}"
+      class="text-decoration-none"
+    >
       <div class="card shadow" data-id="{{ subject.id }}">
         <div
           class="d-flex justify-content-center align-items-center"
