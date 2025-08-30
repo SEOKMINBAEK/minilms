@@ -34,7 +34,7 @@
       <div class="col-sm-6 col-12 d-flex gap-3">
         <div class="form-check">
           <input
-            class="form-check-input"
+            class="form-check-input mb-3"
             type="radio"
             name="frequency_type"
             id="once"
@@ -45,7 +45,7 @@
         </div>
         <div class="form-check">
           <input
-            class="form-check-input"
+            class="form-check-input mb-3"
             type="radio"
             name="frequency_type"
             id="multiple"
@@ -177,12 +177,7 @@
     </div>
 
     <div class="d-flex justify-content-center mt-5">
-      <button
-        type="submit"
-        class="btn btn-primary btn-lg"
-        id="apply-btn"
-        disabled
-      >
+      <button type="submit" class="btn btn-primary" id="apply-btn" disabled>
         <span class="text-white" id="btn-text">신청하기</span>
         <span
           class="text-white spinner-border spinner-border-sm"
@@ -233,7 +228,7 @@
       }
     });
 
-    if ($("#multiple").is(":checked") && $("#frequency_count").val() == "") {
+    if ($("#multiple").is(":checked") && $("#frequency_count").val() == "1") {
       disabled = true;
     }
 

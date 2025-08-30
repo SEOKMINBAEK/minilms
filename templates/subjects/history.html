@@ -8,13 +8,13 @@
   </div>
 
   <div>
-    <table class="table">
+    <table class="table table-hover">
       <thead class="table-light">
         <tr>
           <th scope="col">신청수업</th>
           <th scope="col">운영 지역</th>
           <th scope="col">수업 형태</th>
-          <th scople="col">수업 횟수</th>
+          <th scope="col">수업 횟수</th>
           <th scope="col">학급 수</th>
           <th scope="col">신청자</th>
           <th scope="col">이메일</th>
@@ -26,7 +26,8 @@
   </div>
 </div>
 
-<div class="modal fade" id="detail">
+<!-- Modal -->
+<div class="modal fade" id="detail" data-id="">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -39,8 +40,18 @@
         ></button>
       </div>
       <div class="modal-body">
-        <input type="hidden" name="subject_id" value="{{ subject.id }}" />
-        <input type="hidden" name="subject_title" value="{{ subject.title }}" />
+        <input type="hidden" name="subject_id" value="" />
+        <input type="hidden" name="subject_title" value="" />
+        <div class="row">
+          <div class="col-lg-6 col-12">
+            <p for="name">신청 수업</p>
+          </div>
+          <div class="col-lg-6 col-12">
+            <select class="form-select mb-3 required" name="subject">
+              <option value="" selected>선택해주세요</option>
+            </select>
+          </div>
+        </div>
         <div class="row">
           <div class="col-lg-6 col-12">
             <p for="name">프로그램 운영 지역</p>
@@ -62,7 +73,7 @@
           <div class="col-lg-6 col-12 d-flex gap-3">
             <div class="form-check">
               <input
-                class="form-check-input"
+                class="form-check-input mb-3"
                 type="radio"
                 name="frequency_type"
                 id="once"
@@ -73,7 +84,7 @@
             </div>
             <div class="form-check">
               <input
-                class="form-check-input"
+                class="form-check-input mb-3"
                 type="radio"
                 name="frequency_type"
                 id="multiple"
@@ -209,21 +220,46 @@
         </div>
       </div>
       <div class="modal-footer justify-content-between">
-        <button class="btn btn-danger" data-bs-dismiss="modal">삭제</button>
-        <button class="btn btn-primary" data-bs-dismiss="modal">저장</button>
+        <button class="btn btn-danger" id="delete">삭제</button>
+        <button class="btn btn-primary" id="save">저장</button>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-  const getApplyHistory = async (id) => {
-    let path = "/subjects/history/api";
-    if (id) path += `/${id}/`;
-
-    const response = await fetch(path);
-    const data = await response.json();
+  const getSubjects = async () => {
+    const data = await $.ajax({
+      url: "/subjects/api/",
+      method: "GET",
+    });
     return data;
+  };
+
+  const getApplyHistory = async (id) => {
+    const data = await $.ajax({
+      url: id ? `/subjects/history/api/${id}/` : "/subjects/history/api/",
+      method: "GET",
+    });
+    return data;
+  };
+
+  const deleteApplyHistory = async (id) => {
+    const response = await $.ajax({
+      url: `/subjects/history/api/${id}/`,
+      method: "DELETE",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+    });
+  };
+
+  const updateApplyHistory = async (id, data) => {
+    const response = await $.ajax({
+      url: `/subjects/history/api/${id}/`,
+      method: "PUT",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+      data: JSON.stringify(data),
+      contentType: "application/json",
+    });
   };
 
   const renderApplyHistory = (data) => {
@@ -250,21 +286,168 @@
   };
 
   const openModal = async (id) => {
-    const data = await getApplyHistory(id);
-    console.log(data);
+    $("#detail").data("id", id);
+    const subjects = await getSubjects();
+    const applyData = await getApplyHistory(id);
+
+    const $subjectSelect = $("select[name='subject']");
+    $subjectSelect.empty();
+    subjects.forEach((subject) => {
+      $subjectSelect.append(
+        `<option value="${subject.id}">${subject.title}</option>`
+      );
+    });
+    $subjectSelect.val(applyData.subject);
+    $("input[name='subject_id']").val(applyData.subject);
+    $("input[name='subject_title']").val(applyData.subject_title);
+
+    $("select[name='region']").val(applyData.region);
+    $(`input[name='frequency_type'][value='${applyData.frequency_type}']`).prop(
+      "checked",
+      true
+    );
+    if (applyData.frequency_type == "once") {
+      $("#frequency-container").hide();
+    } else {
+      $("#frequency-container").show();
+    }
+    $("select[name='frequency_count']").val(applyData.frequency_count);
+
+    $("select[name='class_count']").val(applyData.class_count);
+    $("input[name='name']").val(applyData.name);
+
+    const [emailId, emailDomain] = applyData.email.split("@");
+    console.log(emailId, emailDomain);
+    $("input[name='email_id']").val(emailId);
+
+    const isIncluded = [
+      "naver.com",
+      "gmail.com",
+      "daum.net",
+      "hanmail.net",
+    ].includes(emailDomain);
+
+    if (isIncluded) {
+      $("select[name='email_domain']").val(emailDomain);
+    } else {
+      $("select[name='email_domain']").val("direct");
+      $("input[name='direct_domain']")
+        .val(emailDomain)
+        .show()
+        .prop("disabled", false);
+    }
+
+    const [phone1, phone2, phone3] = applyData.phone.split("-");
+    $("input[name='phone1']").val(phone1);
+    $("input[name='phone2']").val(phone2);
+    $("input[name='phone3']").val(phone3);
 
     const modal = new bootstrap.Modal($("#detail"));
     modal.show();
   };
 
+  const closeModal = () => {
+    const modal = bootstrap.Modal.getInstance($("#detail"));
+    modal.hide();
+  };
+
   $(document).ready(async () => {
     const data = await getApplyHistory();
     renderApplyHistory(data);
+  });
 
-    $("tbody").on("click", "tr", function () {
-      const id = $(this).data("id");
-      openModal(id);
+  $("tbody").on("click", "tr", function () {
+    const id = $(this).data("id");
+    openModal(id);
+  });
+
+  $("select[name='subject']").on("change", function () {
+    const selectedOption = $(this).find("option:selected");
+    $("input[name='subject_id']").val(selectedOption.val());
+    $("input[name='subject_title']").val(selectedOption.text());
+  });
+
+  $("input[name='frequency_type']").on("change", function () {
+    const frequencyType = $(this).val();
+    if (frequencyType == "once") {
+      $("#frequency-container").hide();
+    } else {
+      $("#frequency-container").show();
+    }
+
+    $("select[name='frequency_count']").val(1);
+  });
+
+  $("select[name='email_domain']").on("change", function () {
+    const domain = $(this).val();
+    if (domain == "direct") {
+      $("input[name='direct_domain']").show().prop("disabled", false);
+    } else {
+      $("input[name='direct_domain']").hide().prop("disabled", true).val("");
+    }
+  });
+
+  $("#delete").on("click", async () => {
+    const id = $("#detail").data("id");
+    const ok = await deleteApplyHistory(id);
+    console.log(111, ok);
+    closeModal();
+  });
+
+  $("#save").on("click", async () => {
+    const id = $("#detail").data("id");
+    const data = {
+      subject: $("input[name='subject_id']").val(),
+      subject_title: $("input[name='subject_title']").val(),
+      region: $("select[name='region']").val(),
+      frequency_type: $("input[name='frequency_type']:checked").val(),
+      frequency_count: $("select[name='frequency_count']").val(),
+      class_count: $("select[name='class_count']").val(),
+      name: $("input[name='name']").val(),
+      email:
+        $("input[name='email_id']").val() +
+        "@" +
+        ($("select[name='email_domain']").val() === "direct"
+          ? $("input[name='direct_domain']").val()
+          : $("select[name='email_domain']").val()),
+      phone:
+        $("input[name='phone1']").val() +
+        "-" +
+        $("input[name='phone2']").val() +
+        "-" +
+        $("input[name='phone3']").val(),
+    };
+
+    await updateApplyHistory(id, data);
+
+    const updatedData = await getApplyHistory();
+    renderApplyHistory(updatedData);
+
+    closeModal();
+  });
+
+  $("input, select").on("input change", () => {
+    let disabled = false;
+
+    $(".required").each((index, element) => {
+      if ($(element).val().trim() == "") {
+        disabled = true;
+        return;
+      }
     });
+
+    if ($("#multiple").is(":checked") && $("#frequency_count").val() == "1") {
+      disabled = true;
+    }
+
+    if (
+      $("#email_domain").val() == "direct" &&
+      $("#direct_domain").val().trim() == ""
+    ) {
+      disabled = true;
+    }
+
+    $("#save").prop("disabled", disabled);
   });
 </script>
 {% endblock %}

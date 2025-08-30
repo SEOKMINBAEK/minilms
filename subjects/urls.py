@@ -5,6 +5,7 @@ from rest_framework.routers import DefaultRouter
 app_name = 'subjects'
 
 router = DefaultRouter()
+router.register(r'api', views.SubjectViewSet)
 router.register(r'history/api', views.ApplyViewSet)
 
 urlpatterns = [

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.core.mail import send_mail
 from .models import Subject, Curriculum, Apply
-from .serializers import ApplySerializer
+from .serializers import SubjectSerializer, ApplySerializer
 from rest_framework import viewsets
 
 # 목록 페이지(/)
@@ -73,6 +73,9 @@ def apply(request, id):
 def history(request):
     return render(request, 'subjects/history.html')
 
+class SubjectViewSet(viewsets.ModelViewSet):
+    queryset = Subject.objects.all()
+    serializer_class = SubjectSerializer
 class ApplyViewSet(viewsets.ModelViewSet):
     queryset = Apply.objects.all()
     serializer_class = ApplySerializer
