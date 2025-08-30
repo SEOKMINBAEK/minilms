@@ -24,10 +24,14 @@
       <tbody></tbody>
     </table>
   </div>
+
+  <div class="d-flex justify-content-end">
+    <button class="btn btn-success" id="add">추가</button>
+  </div>
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="detail" data-id="">
+<div class="modal fade" id="detail" data-id="" data-method="">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -36,7 +40,6 @@
           type="button"
           class="btn-close"
           data-bs-dismiss="modal"
-          aria-label="Close"
         ></button>
       </div>
       <div class="modal-body">
@@ -262,6 +265,16 @@
     });
   };
 
+  const createApplyHistory = async (data) => {
+    const response = await $.ajax({
+      url: `/subjects/history/api/`,
+      method: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+      data: JSON.stringify(data),
+      contentType: "application/json",
+    });
+  };
+
   const renderApplyHistory = (data) => {
     const $tbody = $("tbody");
     $tbody.empty();
@@ -290,6 +303,8 @@
     const subjects = await getSubjects();
     const applyData = await getApplyHistory(id);
 
+    const modal = new bootstrap.Modal($("#detail"));
+
     const $subjectSelect = $("select[name='subject']");
     $subjectSelect.empty();
     subjects.forEach((subject) => {
@@ -297,6 +312,18 @@
         `<option value="${subject.id}">${subject.title}</option>`
       );
     });
+
+    if (!id) {
+      $("select[name='subject']").val(subjects[0].id);
+      $("input[name='subject_id']").val(subjects[0].id);
+      $("input[name='subject_title']").val(subjects[0].title);
+      $("#delete").css("visibility", "hidden");
+      modal.show();
+      return;
+    }
+
+    $("#delete").css("visibility", "visible");
+
     $subjectSelect.val(applyData.subject);
     $("input[name='subject_id']").val(applyData.subject);
     $("input[name='subject_title']").val(applyData.subject_title);
@@ -342,7 +369,6 @@
     $("input[name='phone2']").val(phone2);
     $("input[name='phone3']").val(phone3);
 
-    const modal = new bootstrap.Modal($("#detail"));
     modal.show();
   };
 
@@ -358,6 +384,7 @@
 
   $("tbody").on("click", "tr", function () {
     const id = $(this).data("id");
+    $("#detail").data("method", "update");
     openModal(id);
   });
 
@@ -369,6 +396,7 @@
 
   $("input[name='frequency_type']").on("change", function () {
     const frequencyType = $(this).val();
+    console.log(frequencyType);
     if (frequencyType == "once") {
       $("#frequency-container").hide();
     } else {
@@ -418,7 +446,12 @@
         $("input[name='phone3']").val(),
     };
 
-    await updateApplyHistory(id, data);
+    const method = $("#detail").data("method");
+    if (method == "update") {
+      await updateApplyHistory(id, data);
+    } else {
+      await createApplyHistory(data);
+    }
 
     const updatedData = await getApplyHistory();
     renderApplyHistory(updatedData);
@@ -448,6 +481,34 @@
     }
 
     $("#save").prop("disabled", disabled);
+  });
+
+  $("#add").on("click", () => {
+    $("#detail").data("method", "create");
+    openModal();
+  });
+
+  $("#detail").on("hidden.bs.modal", () => {
+    $("#detail").data("id", "");
+    $("#detail").data("method", "");
+    $("select[name='subject']").val("");
+    $("input[name='subject_id']").val("");
+    $("input[name='subject_title']").val("");
+    $("select[name='region']").val("");
+    $("input[name='frequency_type'][value='once']").prop("checked", true);
+    $("select[name='frequency_count']").val("1");
+    $("#frequency-container").hide();
+    $("select[name='class_count']").val("");
+    $("input[name='name']").val("");
+    $("input[name='email_id']").val("");
+    $("input[name='direct_domain']").val("").hide().prop("disabled", true);
+    $("select[name='email_domain']").val("");
+    $("input[name='phone1']").val("010");
+    $("input[name='phone2']").val("");
+    $("input[name='phone3']").val("");
+
+    $("#delete").css("visibility", "hidden");
+    $("#save").prop("disabled", true);
   });
 </script>
 {% endblock %}
