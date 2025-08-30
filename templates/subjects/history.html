@@ -26,9 +26,199 @@
   </div>
 </div>
 
+<div class="modal fade" id="detail">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">신청내역 상세</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" name="subject_id" value="{{ subject.id }}" />
+        <input type="hidden" name="subject_title" value="{{ subject.title }}" />
+        <div class="row">
+          <div class="col-lg-6 col-12">
+            <p for="name">프로그램 운영 지역</p>
+          </div>
+          <div class="col-lg-6 col-12">
+            <select class="form-select mb-3 required" name="region">
+              <option value="" selected>선택해주세요</option>
+              <option value="수도권">수도권</option>
+              <option value="대전충청">대전충청</option>
+              <option value="춘천">춘천</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6 col-12">
+            <p>수업 형태</p>
+          </div>
+          <div class="col-lg-6 col-12 d-flex gap-3">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="frequency_type"
+                id="once"
+                value="once"
+                checked
+              />
+              <label class="form-check-label" for="once">1회/캠프</label>
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="frequency_type"
+                id="multiple"
+                value="multiple"
+              />
+              <label class="form-check-label" for="multiple"> 다회 </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="display: none" id="frequency-container">
+          <div class="col-lg-6 col-12">
+            <p for="name">수업 횟수</p>
+          </div>
+          <div class="col-lg-6 col-12">
+            <select
+              class="form-select mb-3"
+              id="frequency_count"
+              name="frequency_count"
+            >
+              <option value="1" selected>선택해주세요</option>
+              <option value="2">2회</option>
+              <option value="3">3회</option>
+              <option value="4">4회</option>
+              <option value="5">5회 이상</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6 col-12">
+            <p>학급 수</p>
+          </div>
+          <div class="col-lg-6 col-12">
+            <select class="form-select mb-3 required" name="class_count">
+              <option value="" selected>선택해주세요</option>
+              <option value="1">1학급</option>
+              <option value="2">2학급</option>
+              <option value="3">3학급</option>
+              <option value="4">4학급</option>
+              <option value="5">5학급 이상</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6 col-12">
+            <p for="name">신청자</p>
+          </div>
+          <div class="col-lg-6 col-12">
+            <input
+              type="text"
+              class="form-control mb-3 required"
+              id="name"
+              name="name"
+            />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6 col-12">
+            <p for="email">이메일</p>
+          </div>
+          <div class="col">
+            <input
+              type="text"
+              class="form-control mb-3 required"
+              name="email_id"
+            />
+          </div>
+          <div class="col-auto mb-3 px-0 pt-2">@</div>
+          <div class="col">
+            <input
+              type="text"
+              class="form-control mb-3"
+              id="direct_domain"
+              name="direct_domain"
+              disabled
+              style="display: none"
+            />
+            <select
+              class="form-select mb-3 required"
+              id="email_domain"
+              name="email_domain"
+            >
+              <option value="" selected>선택해주세요</option>
+              <option value="naver.com">naver.com</option>
+              <option value="gmail.com">gmail.com</option>
+              <option value="daum.net">daum.net</option>
+              <option value="hanmail.net">hanmail.net</option>
+              <option value="direct">직접입력</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6 col-12">
+            <p for="phone">휴대폰 번호</p>
+          </div>
+          <div class="col">
+            <input
+              type="text"
+              class="form-control mb-3 phone required"
+              id="phone1"
+              name="phone1"
+              value="010"
+              maxlength="3"
+              inputmode="numeric"
+            />
+          </div>
+          <div class="col-auto mb-3 px-0 pt-2">-</div>
+          <div class="col">
+            <input
+              type="text"
+              class="form-control mb-3 phone required"
+              id="phone2"
+              name="phone2"
+              maxlength="4"
+              inputmode="numeric"
+            />
+          </div>
+          <div class="col-auto mb-3 px-0 pt-2">-</div>
+          <div class="col">
+            <input
+              type="text"
+              class="form-control mb-3 phone required"
+              id="phone3"
+              name="phone3"
+              maxlength="4"
+              inputmode="numeric"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button class="btn btn-danger" data-bs-dismiss="modal">삭제</button>
+        <button class="btn btn-primary" data-bs-dismiss="modal">저장</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   const getApplyHistory = async (id) => {
-    const path = "/subjects/history/api";
+    let path = "/subjects/history/api";
     if (id) path += `/${id}/`;
 
     const response = await fetch(path);
@@ -59,9 +249,22 @@
     });
   };
 
+  const openModal = async (id) => {
+    const data = await getApplyHistory(id);
+    console.log(data);
+
+    const modal = new bootstrap.Modal($("#detail"));
+    modal.show();
+  };
+
   $(document).ready(async () => {
     const data = await getApplyHistory();
     renderApplyHistory(data);
+
+    $("tbody").on("click", "tr", function () {
+      const id = $(this).data("id");
+      openModal(id);
+    });
   });
 </script>
 {% endblock %}
