@@ -1,0 +1,67 @@
+{% extends 'base.html' %} {% block content %}
+<div class="d-flex flex-column gap-5">
+  <div class="d-flex justify-content-between align-items-start">
+    <div>
+      <h2>수업신청내역</h2>
+      <p class="fs-5 text-muted">test</p>
+    </div>
+  </div>
+
+  <div>
+    <table class="table">
+      <thead class="table-light">
+        <tr>
+          <th scope="col">신청수업</th>
+          <th scope="col">운영 지역</th>
+          <th scope="col">수업 형태</th>
+          <th scople="col">수업 횟수</th>
+          <th scope="col">학급 수</th>
+          <th scope="col">신청자</th>
+          <th scope="col">이메일</th>
+          <th scope="col">휴대폰 번호</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  const getApplyHistory = async (id) => {
+    const path = "/subjects/history/api";
+    if (id) path += `/${id}/`;
+
+    const response = await fetch(path);
+    const data = await response.json();
+    return data;
+  };
+
+  const renderApplyHistory = (data) => {
+    const $tbody = $("tbody");
+    $tbody.empty();
+
+    data.forEach((apply) => {
+      const $tr = $("<tr></tr>");
+
+      $tr.data("id", apply.id);
+      $tr.append(`
+        <td>${apply.subject_title}</td>
+        <td>${apply.region}</td>
+        <td>${apply.frequency_type === "once" ? "1회/캠프" : "다회"}</td>
+        <td>${apply.frequency_count}</td>
+        <td>${apply.class_count}</td>
+        <td>${apply.name}</td>
+        <td>${apply.email}</td>
+        <td>${apply.phone}</td>
+      `);
+
+      $tbody.append($tr);
+    });
+  };
+
+  $(document).ready(async () => {
+    const data = await getApplyHistory();
+    renderApplyHistory(data);
+  });
+</script>
+{% endblock %}

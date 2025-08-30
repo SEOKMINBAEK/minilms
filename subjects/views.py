@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.core.mail import send_mail
 from .models import Subject, Curriculum, Apply
+from .serializers import ApplySerializer
+from rest_framework import viewsets
 
 # 목록 페이지(/)
 def index(request):
@@ -67,3 +69,10 @@ def apply(request, id):
     )
 
     return redirect('subjects:index')
+
+def history(request):
+    return render(request, 'subjects/history.html')
+
+class ApplyViewSet(viewsets.ModelViewSet):
+    queryset = Apply.objects.all()
+    serializer_class = ApplySerializer
