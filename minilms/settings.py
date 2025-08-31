@@ -134,3 +134,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'gatsby3130@gmail.com'
 EMAIL_HOST_PASSWORD = 'qfmp bpfg lmny oajm'
 DEFAULT_FROM_EMAIL = 'gatsby3130@gmail.com'
+
+# Login/out
+LOGIN_REDIRECT_URL = '/subjects/'
+LOGOUT_REDIRECT_URL = '/admin/login/'

@@ -418,7 +418,10 @@
   $("#delete").on("click", async () => {
     const id = $("#detail").data("id");
     const ok = await deleteApplyHistory(id);
-    console.log(111, ok);
+
+    const updatedData = await getApplyHistory();
+    renderApplyHistory(updatedData);
+
     closeModal();
   });
 
