@@ -3,7 +3,7 @@ from django.db import models
 class Subject(models.Model):
   title = models.CharField(max_length=100)
   content = models.TextField()
-  image = models.URLField(max_length=500)
+  image = models.ImageField(upload_to='subjects/', blank=True, null=True)
   objective = models.TextField()
   audience = models.TextField()
   

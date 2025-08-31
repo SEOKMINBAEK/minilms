@@ -49,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'minilms.middleware.LoginRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'minilms.urls'
@@ -137,4 +138,4 @@ DEFAULT_FROM_EMAIL = 'gatsby3130@gmail.com'
 
 # Login/out
 LOGIN_REDIRECT_URL = '/subjects/'
-LOGOUT_REDIRECT_URL = '/admin/login/'
+LOGOUT_REDIRECT_URL = '/login/'

@@ -16,6 +16,15 @@ def detail(request, id):
   curriculums = Curriculum.objects.filter(subject_id=id)
   return render(request, 'subjects/detail.html', {'subject': subject, 'curriculums': curriculums})
 
+# 이미지 업로드 처리
+def upload_image(request, id):
+  # 기존 업로드 이미지를 삭제하고 새 이미지를 저장
+  subject = Subject.objects.get(id=id)
+  subject.image.delete()
+  subject.image.save(request.FILES['image'].name, request.FILES['image'])
+  subject.save()
+  return HttpResponse('Image uploaded successfully')
+
 # 신청 페이지(/apply/:id)
 def apply(request, id):
   if request.method == 'GET':

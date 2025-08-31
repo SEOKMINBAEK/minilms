@@ -3,9 +3,10 @@ from django.conf import settings
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.views.generic.base import RedirectView
+from .views import root_redirect
 
 urlpatterns = [
-    path('', RedirectView.as_view(url='/login/', permanent=False)),
+    path('', root_redirect, name='root_redirect'),
     path('login/', admin.site.login, name='login'),
     path('logout/', admin.site.logout, name='logout'),
     path('subjects/', include('subjects.urls')),
