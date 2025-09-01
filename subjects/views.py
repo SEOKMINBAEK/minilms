@@ -23,7 +23,7 @@ def upload_image(request, id):
   subject.image.delete()
   subject.image.save(request.FILES['image'].name, request.FILES['image'])
   subject.save()
-  return HttpResponse('Image uploaded successfully')
+  return redirect('subjects:detail', id=id)
 
 # 신청 페이지(/apply/:id)
 def apply(request, id):
