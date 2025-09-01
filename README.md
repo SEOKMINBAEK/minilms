@@ -1,5 +1,6 @@
 # URL
 [[보러가기](minilms-production.up.railway.app)](https://minilms-production.up.railway.app/)
+최초 방문시 로그인 페이지가 나타나지 않는다면, /login으로 접속 부탁드립니다.
 
 # 사이트맵
 
