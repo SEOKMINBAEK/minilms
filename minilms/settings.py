@@ -95,6 +95,8 @@ else:
         }
     }
 
+# aa
+
 if os.environ.get('RAILWAY_ENVIRONMENT') and os.environ.get('CREATE_SUPERUSER'):
     try:
         from django.contrib.auth.models import User
