@@ -29,6 +29,7 @@ SECRET_KEY = 'django-insecure-8r06cqxp3udu5e5uzlo-8@*uh*kl6w$r@8%-&$q5+4s-)il9)^
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ['http://localhost', 'https://*.railway.app']
 
 
 # Application definition
@@ -82,7 +83,7 @@ WSGI_APPLICATION = 'minilms.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-if 'DATABASES_URL' in os.environ:
+if 'DATABASE_URL' in os.environ:
     DATABASES = {
         'default': dj_database_url.config(default=os.environ['DATABASES_URL'])
     }
