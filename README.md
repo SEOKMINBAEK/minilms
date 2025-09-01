@@ -1,6 +1,9 @@
 # URL
 [[보러가기](minilms-production.up.railway.app)](https://minilms-production.up.railway.app/)
+
 최초 방문시 로그인 페이지가 나타나지 않는다면, /login으로 접속 부탁드립니다.
+
+RAILWAY 환경 상 SMTP 메일 서버의 부재로 메일발송 테스트는 리포지토리 다운로드 후 로컬 환경에서 테스트 해주시면 감사하겠습니다.
 
 # 사이트맵
 
