@@ -4,6 +4,7 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.views.generic.base import RedirectView
 from .views import root_redirect
+import os
 
 urlpatterns = [
     path('', root_redirect, name='root_redirect'),
@@ -12,5 +13,5 @@ urlpatterns = [
     path('subjects/', include('subjects.urls')),
     path('admin/', admin.site.urls),
 ]
-
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if os.environ.get('RAILWAY_ENVIRONMENT'):
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

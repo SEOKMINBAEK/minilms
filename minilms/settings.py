@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,8 +40,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
 ]
+
+if os.environ.get('RAILWAY_ENVIRONMENT'):
+    INSTALLED_APPS += [
+        'cloudinary_storage',
+        'cloudinary',
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -49,7 +56,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'minilms.middleware.LoginRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'minilms.urls'
@@ -120,22 +126,18 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 MEDIA_URL = '/uploads/'
-MEDIA_ROOT = BASE_DIR / 'uploads'
+if os.environ.get('RAILWAY_ENVIRONMENT'):
+    import cloudinary
+    cloudinary.config(
+        cloud_name = config('CLOUDINARY_CLOUD_NAME'),
+        api_key = config('CLOUDINARY_API_KEY'),
+        api_secret = config('CLOUDINARY_API_SECRET')
+    )
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+else:
+    MEDIA_ROOT = BASE_DIR / 'uploads'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Email settings
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'gatsby3130@gmail.com'
-EMAIL_HOST_PASSWORD = 'qfmp bpfg lmny oajm'
-DEFAULT_FROM_EMAIL = 'gatsby3130@gmail.com'
-
-# Login/out
-LOGIN_REDIRECT_URL = '/subjects/'
-LOGOUT_REDIRECT_URL = '/login/'

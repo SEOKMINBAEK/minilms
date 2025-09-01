@@ -1,0 +1,1 @@
+web: gunicorn minilms.wsgi --log-file -
