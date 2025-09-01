@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'minilms.wsgi.application'
 
 if 'DATABASE_URL' in os.environ:
     DATABASES = {
-        'default': dj_database_url.config(default=os.environ['DATABASES_URL'])
+        'default': dj_database_url.config(default=os.environ['DATABASE_URL'])
     }
 else:
     DATABASES = {
