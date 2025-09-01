@@ -1,1 +1,1 @@
-web: python manage.py migrate && python manage.py createsuperuser --noinput && gunicorn minilms.wsgi --log-file -
+web: python manage.py migrate && gunicorn minilms.wsgi --log-file -
