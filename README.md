@@ -1,5 +1,5 @@
 # URL
-[[보러가기](minilms-production.up.railway.app)](https://minilms-production.up.railway.app/)
+[[보러가기](https://minilms-production.up.railway.app)](https://minilms-production.up.railway.app/)
 
 - ID: admin
 - PW: 0000
