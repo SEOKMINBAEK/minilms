@@ -1,5 +1,5 @@
 # URL
-[보러가기](minilms-production.up.railway.app)
+[[보러가기](minilms-production.up.railway.app)](https://minilms-production.up.railway.app/)
 
 # 사이트맵
 
