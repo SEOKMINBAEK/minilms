@@ -61,21 +61,23 @@ def apply(request, id):
         email=email,
         phone=phone
     )
-    
-    send_mail(
-        f'[{subject_title}] 수업 신청이 완료되었습니다.',
-        f'''
-        안녕하세요 {name}님.
-        {subject_title} 수업 신청이 완료되었습니다.
-        신청 내역은 담당자가 확인 후,
-        {phone} 번호로 연락드리겠습니다.
+    try:
+      send_mail(
+          f'[{subject_title}] 수업 신청이 완료되었습니다.',
+          f'''
+          안녕하세요 {name}님.
+          {subject_title} 수업 신청이 완료되었습니다.
+          신청 내역은 담당자가 확인 후,
+          {phone} 번호로 연락드리겠습니다.
 
-        감사합니다.
-        ''',
-        'gatsby3130@gmail.com',
-        [email, 'gatsby3130@gmail.com'],
-        fail_silently=False,
-    )
+          감사합니다.
+          ''',
+          'gatsby3130@gmail.com',
+          [email, 'gatsby3130@gmail.com'],
+          fail_silently=False,
+      )
+    except Exception as e:
+      pass
 
     return redirect('subjects:index')
 
