@@ -94,6 +94,14 @@ else:
         }
     }
 
+if os.environ.get('RAILWAY_ENVIRONMENT') and os.environ.get('CREATE_SUPERUSER'):
+    try:
+        from django.contrib.auth.models import User
+        if not User.objects.filter(username='admin').exists():
+            User.objects.create_superuser('admin', 'admin@example.com', '0000')
+    except:
+        pass
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
