@@ -1,3 +1,6 @@
+# URL
+(minilms-production.up.railway.app)
+
 # 사이트맵
 
 - /login: Django admin기능을 활용한 커스텀 로그인 페이지
